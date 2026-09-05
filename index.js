@@ -31,7 +31,24 @@ bot.start((ctx) => {
 bot.command("status", (ctx) => {
   ctx.reply("✅ Telegram bot is online.");
 });
+bot.command("help", (ctx) => {
+  ctx.reply(
+    "🤖 Deriv Trading Bot\n\n" +
+    "Available commands:\n" +
+    "/start - Start the bot\n" +
+    "/status - Check bot status\n" +
+    "/help - Show this menu\n" +
+    "/trade - Trading menu"
+  );
+});
 
+bot.command("trade", (ctx) => {
+  ctx.reply(
+    "📈 Trading Menu\n\n" +
+    "Trading functions are not connected yet.\n\n" +
+    "Next we will connect the bot to Deriv."
+  );
+});
 bot.catch((err) => {
   console.error("Telegram bot error:", err);
 });
