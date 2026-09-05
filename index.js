@@ -42,12 +42,38 @@ bot.command("help", (ctx) => {
   );
 });
 
-bot.command("trade", (ctx) => {
-  ctx.reply(
-    "📈 Trading Menu\n\n" +
-    "Trading functions are not connected yet.\n\n" +
-    "Next we will connect the bot to Deriv."
-  );
+bot.command("trade", async (ctx) => {
+  const DERIV_TOKEN = process.env.DERIV_TOKEN;
+  const DERIV_APP_ID = process.env.DERIV_APP_ID;
+
+  if (!DERIV_TOKEN || !DERIV_APP_ID) {
+    return ctx.reply("⚠️ Deriv connection is not configured yet.");
+  }
+
+  try {
+    const axios = require("axios");
+
+    await axios.get(
+      "https://api.derivws.com/trading/v1/options/accounts",
+      {
+        headers: {
+          "Deriv-App-ID": DERIV_APP_ID,
+          "Authorization": `Bearer ${DERIV_TOKEN}`
+        }
+      }
+    );
+
+    await ctx.reply("✅ Deriv is connected successfully.");
+  } catch (error) {
+    console.error(
+      "Deriv connection error:",
+      error.response?.data || error.message
+    );
+
+    await ctx.reply(
+      "❌ Could not connect to Deriv. Check the Deriv App ID and token settings."
+    );
+  }
 });
 bot.catch((err) => {
   console.error("Telegram bot error:", err);
